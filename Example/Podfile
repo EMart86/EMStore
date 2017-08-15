@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'EMStore_Example' do
+  pod 'EMStore', :path => '../'
+
+  target 'EMStore_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

@@ -9,16 +9,10 @@
 Pod::Spec.new do |s|
   s.name             = 'EMStore'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of EMStore.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.summary          = 'A simple SQLite wrapper library for faster setup of core data'
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+With thos library, you don't need to write all this ManagedObjectContext and Persistance Store Coordinator, because it does that for you. All you need to do is, to focus on your models
                        DESC
 
   s.homepage         = 'https://github.com/eberl_ma@gmx.at/EMStore'
@@ -26,17 +20,8 @@ TODO: Add long description of the pod here.
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'eberl_ma@gmx.at' => 'martin.eberl@styria.com' }
   s.source           = { :git => 'https://github.com/eberl_ma@gmx.at/EMStore.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'EMStore/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'EMStore' => ['EMStore/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

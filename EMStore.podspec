@@ -15,11 +15,11 @@ Pod::Spec.new do |s|
 With thos library, you don't need to write all this ManagedObjectContext and Persistance Store Coordinator, because it does that for you. All you need to do is, to focus on your models
                        DESC
 
-  s.homepage         = 'https://github.com/eberl_ma@gmx.at/EMStore'
+  s.homepage         = 'https://github.com/EMart86/EMStore'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'eberl_ma@gmx.at' => 'martin.eberl@styria.com' }
-  s.source           = { :git => 'https://github.com/eberl_ma@gmx.at/EMStore.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/EMart86/EMStore.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
 

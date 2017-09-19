@@ -116,20 +116,20 @@ final class ManagedObjectProvider: ObjectProvider {
     }
 }
 
-final class SqliteStorage<T: NSManagedObject>: Storage {
+final public class SqliteStorage<T: NSManagedObject>: Storage {
 
-    private(set) var provider: ObjectProvider = ObjectProvider()
+    private(set) public var provider: ObjectProvider = ObjectProvider()
     
     private let momdName: String
     private let sqlFileUrl: URL?
     
-    init(_ momdName: String,
+    public init(_ momdName: String,
          sqlFileUrl: URL? = nil) {
         self.momdName = momdName
         self.sqlFileUrl = sqlFileUrl
     }
     
-    func createProvider() -> SqliteStorage<T> {
+    public func createProvider() -> SqliteStorage<T> {
         let managedObjectContext = self.managedObjectContext
         provider = ManagedObjectProvider(managedObjectContext)
         return self
@@ -145,21 +145,21 @@ final class SqliteStorage<T: NSManagedObject>: Storage {
         }
     }()
     
-    func insert(model: Any) {
+    public func insert(model: Any) {
         guard let model = model as? NSManagedObject else {
             return
         }
         managedObjectContext.insert(model)
     }
     
-    func remove(model: Any) {
+    public func remove(model: Any) {
         guard let model = model as? NSManagedObject else {
             return
         }
         managedObjectContext.delete(model)
     }
     
-    func commit() {
+    public func commit() {
         if managedObjectContext.hasChanges {
             do {
                 try managedObjectContext.save()
@@ -170,7 +170,7 @@ final class SqliteStorage<T: NSManagedObject>: Storage {
         }
     }
     
-    func rollback() {
+    public func rollback() {
         if managedObjectContext.hasChanges {
             do {
                 try managedObjectContext.rollback()

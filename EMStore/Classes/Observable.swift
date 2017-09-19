@@ -8,33 +8,33 @@
 
 import Foundation
 
-protocol Destroyable {
+public protocol Destroyable {
     var identifier: Date { get }
     func destroy()
 }
 
-func ==(lhs: Destroyable, rhs: Destroyable) -> Bool {
+public func ==(lhs: Destroyable, rhs: Destroyable) -> Bool {
     return lhs.identifier == rhs.identifier
 }
 
-struct ObserverBlock<T> {
+public struct ObserverBlock<T> {
     private(set) var object: T?
     init(object: T) {
         self.object = object
     }
 }
 
-struct DestroyableObserver<T>: Destroyable {
+public struct DestroyableObserver<T>: Destroyable {
     private var object: Observable<T>
     private(set) var block:  ObserverBlock<(T) -> Void>?
-    let identifier = Date()
+    public let identifier = Date()
     
     init(object: Observable<T>, block: ObserverBlock<(T) -> Void>) {
         self.object = object
         self.block = block
     }
     
-    func destroy() {
+    public func destroy() {
         object.destroy(destroyable: self)
     }
 }
@@ -42,13 +42,13 @@ struct DestroyableObserver<T>: Destroyable {
 open class Observable<T>: NSObject {
     internal var observers = [DestroyableObserver<T>]()
 
-    var value: T? {
+    public var value: T? {
         didSet {
             notifyObservers()
         }
     }
     
-    func onValueChanged(closure: @escaping (T) -> Void) -> Destroyable {
+    public func onValueChanged(closure: @escaping (T) -> Void) -> Destroyable {
         let observerBlock = DestroyableObserver<T>(object: self, block: ObserverBlock<(T) -> Void>(object: closure))
         observers.append(observerBlock)
         return observerBlock

@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:EMStore/Entry+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:EMStore/Entry+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:EMStore.xcodeproj">
    </FileRef>
    <FileRef

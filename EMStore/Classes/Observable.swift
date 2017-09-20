@@ -48,7 +48,7 @@ open class Observable<T>: NSObject {
         }
     }
     
-    public func onValueChanged(closure: @escaping (T) -> Void) -> Destroyable {
+    public func onValueChanged(_ closure: @escaping (T) -> Void) -> Destroyable {
         let observerBlock = DestroyableObserver<T>(object: self, block: ObserverBlock<(T) -> Void>(object: closure))
         observers.append(observerBlock)
         return observerBlock

@@ -15,9 +15,9 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        store.entries?.onValueChanged(closure: {[weak tableView = self.tableView] _ in
+        store.entries?.onValueChanged {[weak tableView = self.tableView] _ in
             tableView?.reloadData()
-        })
+        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -15,10 +15,10 @@ public struct ManagedObjectQuery: Query {
     let sortDescriptors: [NSSortDescriptor]
 }
 
-public class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
+open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
     private var observableModels: Observable<[AnyManagedObject]>?
     
-    public func models<AnyManagedObject>() -> Observable<[AnyManagedObject]>? {
+    open func models<AnyManagedObject>() -> Observable<[AnyManagedObject]>? {
         if observableModels == nil {
             observableModels = storage.provider.observable(where: ManagedObjectQuery(entity: entity, predicate: predicate, sortDescriptors: sortDescriptors))
         }

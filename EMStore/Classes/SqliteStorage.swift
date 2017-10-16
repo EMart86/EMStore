@@ -18,7 +18,7 @@ public struct ManagedObjectQuery: Query {
 open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
     private var observableModels: Observable<[AnyManagedObject]>?
     
-    open func models<AnyManagedObject>() -> Observable<[AnyManagedObject]>? {
+    open func models<AnyManagedObject>(_ type: AnyManagedObject.Type) -> Observable<[AnyManagedObject]>? {
         if observableModels == nil {
             observableModels = storage.provider.observable(where: ManagedObjectQuery(entity: entity, predicate: predicate, sortDescriptors: sortDescriptors))
         }

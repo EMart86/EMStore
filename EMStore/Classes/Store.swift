@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol Store {
-    func models<T>() -> Observable<[T]>?
+    func models<T>(_ type: T.Type) -> Observable<[T]>?
     var storage: Storage { get }
 
     func new<T>() -> T?

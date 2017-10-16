@@ -15,7 +15,7 @@ public struct ManagedObjectQuery: Query {
     let sortDescriptors: [NSSortDescriptor]
 }
 
-open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
+public class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
     private var observableModels: Observable<[AnyManagedObject]>?
     
     public func models<AnyManagedObject>() -> Observable<[AnyManagedObject]>? {

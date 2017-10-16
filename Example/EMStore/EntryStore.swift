@@ -25,7 +25,7 @@ final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
     }
     
     var entries: Observable<[Entry]>? {
-        return models()
+        return models(Entry.self)
     }
     
     var new: Entry? {

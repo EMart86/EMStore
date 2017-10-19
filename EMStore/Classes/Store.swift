@@ -9,22 +9,11 @@
 import Foundation
 
 public protocol Store {
-    func models<T>(_ type: T.Type) -> Observable<[T]>?
+    associatedtype Model
+    var models: Observable<[Model]>? { get }
     var storage: Storage { get }
 
-    func new<T>() -> T?
-    func add(model: Any)
-    func remove(model: Any)
-}
-
-extension Store {
-    public func add(model: Any) {
-        storage.insert(model: model)
-        storage.commit()
-    }
-    
-    public func remove(model: Any) {
-        storage.remove(model: model)
-        storage.commit()
-    }
+    func new() -> Model?
+    func add(model: Model)
+    func remove(model: Model)
 }

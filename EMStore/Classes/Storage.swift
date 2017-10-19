@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import CoreData
 
 public protocol Query {
 }
+
 open class ObjectProvider {
     public func observable<T>(where query: Query) -> Observable<[T]>? {
         return nil
@@ -26,4 +28,16 @@ public protocol Storage {
     func remove(model: Any)
     func commit()
     func rollback()
+}
+
+extension Store where Model: NSManagedObject {
+    public func add(model: Model) {
+        storage.insert(model: model)
+        storage.commit()
+    }
+    
+    public func remove(model: Model) {
+        storage.remove(model: model)
+        storage.commit()
+    }
 }

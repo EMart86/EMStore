@@ -19,13 +19,12 @@ final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
     
     init() {
         super.init(storage: SqliteStorage<Entry>("Model").createProvider(),
-                   entity: Entry.self,
                    predicate: nil,
                    sortDescriptors: [NSSortDescriptor(key: "date", ascending: true)])
     }
     
     var entries: Observable<[Entry]>? {
-        return models(Entry.self)
+        return models
     }
     
     var new: Entry? {

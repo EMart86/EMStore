@@ -16,24 +16,23 @@ public struct ManagedObjectQuery: Query {
 }
 
 open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
-    private var observableModels: Observable<[AnyManagedObject]>?
+    public typealias Model = AnyManagedObject
     
-    open func models<AnyManagedObject>(_ type: AnyManagedObject.Type) -> Observable<[AnyManagedObject]>? {
-        if observableModels == nil {
-            observableModels = storage.provider.observable(where: ManagedObjectQuery(entity: entity, predicate: predicate, sortDescriptors: sortDescriptors))
-        }
-        return observableModels as? Observable<[AnyManagedObject]>
-    }
+    public lazy var models: Observable<[AnyManagedObject]>? = {
+        return self.storage.provider.observable(where:
+            ManagedObjectQuery(entity: Model.self,
+                               predicate: self.predicate,
+                               sortDescriptors: self.sortDescriptors)
+        )
+    }()
     
     public private(set) var storage: Storage
-    private let entity: NSManagedObject.Type
     private let predicate: NSPredicate?
     private let sortDescriptors: [NSSortDescriptor]
     
     
-    public init(storage: Storage, entity: NSManagedObject.Type, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]) {
+    public init(storage: Storage, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]) {
         self.storage = storage
-        self.entity = entity
         self.predicate = predicate
         self.sortDescriptors = sortDescriptors
         
@@ -197,8 +196,12 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
         return container
     }()
     
-    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
-        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: NSManagedObjectModel(contentsOf: self.sqlFileUrl!)!)
+    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
+        guard let pathUrl = self.sqlFileUrl,
+            let model = NSManagedObjectModel(contentsOf: pathUrl) else {
+                return nil
+        }
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         do {
             // If your looking for any kind of migration then here is the time to pass it to the options
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: self.sqlFileUrl, options: nil)

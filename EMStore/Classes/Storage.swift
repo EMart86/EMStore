@@ -12,7 +12,7 @@ import CoreData
 public protocol Query {
 }
 
-open class ObjectProvider {
+public class ObjectProvider {
     public func observable<T>(where query: Query) -> Observable<[T]>? {
         return nil
     }

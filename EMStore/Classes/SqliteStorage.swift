@@ -18,7 +18,7 @@ public struct ManagedObjectQuery: Query {
 open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
     public typealias Model = AnyManagedObject
     
-    public lazy var models: Observable<[AnyManagedObject]>? = {
+    open lazy var models: Observable<[AnyManagedObject]>? = {
         return self.storage.provider.observable(where:
             ManagedObjectQuery(entity: Model.self,
                                predicate: self.predicate,

@@ -55,7 +55,9 @@ public final class ManagedObjectObservable<T: NSManagedObject>: Observable<[T]>,
         fetchedResultsController.delegate = self
         do {
             try fetchedResultsController.performFetch()
-            value = fetchedResultsController.fetchedObjects
+            DispatchQueue.main.async {[weak self] in
+                self?.value = fetchedResultsController.fetchedObjects
+            }
         } catch {
             let nserror = error as NSError
             fatalError("Unresolved error \(nserror), \(nserror.userInfo)")

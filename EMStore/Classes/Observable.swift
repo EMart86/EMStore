@@ -39,7 +39,7 @@ public struct DestroyableObserver<T>: Destroyable {
     }
 }
 
-open class Observable<T>: NSObject {
+public class Observable<T>: NSObject {
     internal var observers = [DestroyableObserver<T>]()
 
     public var value: T? {
@@ -67,7 +67,7 @@ open class Observable<T>: NSObject {
     private func notifyObservers() {
         guard let value = value else { return }
         observers
-            .flatMap { return $0.block?.object }
+            .flatMap { $0.block?.object }
             .forEach { $0(value) }
     }
 }

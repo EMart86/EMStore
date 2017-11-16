@@ -41,7 +41,7 @@ open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
         }
     }
     
-    public func new<T>() -> T? {
+    public var new: AnyManagedObject? {
         return storage.provider.new()
     }
 }

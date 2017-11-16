@@ -12,8 +12,8 @@ public protocol Store {
     associatedtype Model
     var models: Observable<[Model]>? { get }
     var storage: Storage { get }
-
-    func new() -> Model?
+    var new: Model? { get }
+    
     func add(model: Model)
     func remove(model: Model)
 }

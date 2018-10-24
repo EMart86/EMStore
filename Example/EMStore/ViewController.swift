@@ -36,7 +36,7 @@ class ViewController: UITableViewController {
             return
         }
         
-        entry.date = NSDate()
+        entry.date = Date()
         provider.storeProvider?.add(model: entry)
     }
     

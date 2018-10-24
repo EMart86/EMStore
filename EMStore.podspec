@@ -8,7 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EMStore'
-  s.version          = '1.0.9'
+  s.version          = '1.1.0'
+  s.swift_version    = '4.1'
   s.summary          = 'A simple SQLite wrapper library for faster setup of core data'
 
   s.description      = <<-DESC
@@ -18,10 +19,12 @@ With thos library, you don't need to write all this ManagedObjectContext and Per
   s.homepage         = 'https://github.com/EMart86/EMStore'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'eberl_ma@gmx.at' => 'martin.eberl@styria.com' }
+  s.author           = { 'eberl_ma@gmx.at' => 'Martin Eberl' }
   s.source           = { :git => 'https://github.com/EMart86/EMStore.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '8.0'
+  s.tvos.deployment_target = '9.0'
+  s.osx.deployment_target = '10.10'
 
   s.source_files = 'EMStore/Classes/**/*'
 end

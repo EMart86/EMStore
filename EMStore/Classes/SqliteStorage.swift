@@ -18,8 +18,16 @@ public struct ManagedObjectQuery: Query {
 open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
     public typealias Model = AnyManagedObject
     
-    open lazy var models: Observable<[AnyManagedObject]>? = {
-        return self.storage.provider.observable(where:
+    open lazy var models: Observable<[Model]>? = {
+        return (storage.provider as? ManagedObjectProvider)?.managedObservable(where: 
+            ManagedObjectQuery(entity: Model.self,
+                               predicate: self.predicate,
+                               sortDescriptors: self.sortDescriptors)
+        )
+    }()
+    
+    open lazy var entities: ManagedObjectObservable<Model>? = {
+        return (storage.provider as? ManagedObjectProvider)?.managedObservable(where:
             ManagedObjectQuery(entity: Model.self,
                                predicate: self.predicate,
                                sortDescriptors: self.sortDescriptors)
@@ -41,13 +49,14 @@ open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
         }
     }
     
-    public var new: AnyManagedObject? {
+    public var new: Model? {
         return storage.provider.new()
     }
 }
 
 public final class ManagedObjectObservable<T: NSManagedObject>: Observable<[T]>, NSFetchedResultsControllerDelegate {
     private let fetchedResultsController: NSFetchedResultsController<T>
+    fileprivate var managedObjectObservers = [(String, Destroyable)]()
     
     public init(_ fetchedResultsController: NSFetchedResultsController<T>) {
         self.fetchedResultsController = fetchedResultsController
@@ -64,6 +73,15 @@ public final class ManagedObjectObservable<T: NSManagedObject>: Observable<[T]>,
         }
     }
     
+    public override func destroy(destroyable: Destroyable) {
+        guard let index = managedObjectObservers.firstIndex(where: { $0.1.identifier == destroyable.identifier } ) else {
+            super.destroy(destroyable: destroyable)
+            return
+        }
+        
+        observers.remove(at: index)
+    }
+    
     public func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("")
     }
@@ -74,6 +92,72 @@ public final class ManagedObjectObservable<T: NSManagedObject>: Observable<[T]>,
     
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         value = fetchedResultsController.fetchedObjects
+        
+        switch type {
+        case .delete:
+            guard let indexPath = indexPath, let anObject = anObject as? T else {
+                return
+            }
+            managedObjectObservers
+                .filter { $0.0 == ObserverIdentifier.removed }
+                .compactMap { $0.1 as? InternalDestroyableOneParameterObserver<T, IndexPath> }
+                .forEach { $0.block?.object(anObject, indexPath) }
+        case .insert:
+            guard let indexPath = newIndexPath, let anObject = anObject as? T else {
+                return
+            }
+            managedObjectObservers
+                .filter { $0.0 == ObserverIdentifier.added }
+                .compactMap { $0.1 as? InternalDestroyableOneParameterObserver<T, IndexPath> }
+                .forEach { $0.block?.object(anObject, indexPath) }
+        case .move:
+            guard let indexPath = indexPath, let newIndexPath = newIndexPath, let anObject = anObject as? T else {
+                return
+            }
+            managedObjectObservers
+                .filter { $0.0 == ObserverIdentifier.moved }
+                .compactMap { $0.1 as? InternalDestroyableTwoParameterObserver<T, IndexPath, IndexPath> }
+                .forEach { $0.block?.object(anObject, indexPath, newIndexPath) }
+        case .update:
+            guard let indexPath = indexPath, let anObject = anObject as? T else {
+                return
+            }
+            managedObjectObservers
+                .filter { $0.0 == ObserverIdentifier.updated }
+                .compactMap { $0.1 as? InternalDestroyableOneParameterObserver<T, IndexPath> }
+                .forEach { $0.block?.object(anObject, indexPath) }
+        }
+        
+    }
+}
+
+extension ManagedObjectObservable {
+    public func onItemAdded(_ closure: @escaping InternalDestroyableOneParameterObserver<T, IndexPath>.Block) -> Destroyable {
+        let observerBlock = InternalDestroyableOneParameterObserver<T, IndexPath>(object: self,
+                                                                                  block: ObserverBlock(object: closure))
+        managedObjectObservers.append((ObserverIdentifier.added, observerBlock))
+        return observerBlock
+    }
+    
+    public func onItemRemoved(_ closure: @escaping InternalDestroyableOneParameterObserver<T, IndexPath>.Block) -> Destroyable {
+        let observerBlock = InternalDestroyableOneParameterObserver<T, IndexPath>(object: self,
+                                                                                  block: ObserverBlock(object: closure))
+        managedObjectObservers.append((ObserverIdentifier.removed, observerBlock))
+        return observerBlock
+    }
+    
+    public func onItemMoved(_ closure: @escaping InternalDestroyableTwoParameterObserver<T, IndexPath, IndexPath>.Block) -> Destroyable {
+        let observerBlock = InternalDestroyableTwoParameterObserver<T, IndexPath, IndexPath>(object: self,
+                                                                                             block: ObserverBlock(object: closure))
+        managedObjectObservers.append((ObserverIdentifier.moved, observerBlock))
+        return observerBlock
+    }
+    
+    public func onItemUpdated(_ closure: @escaping InternalDestroyableOneParameterObserver<T, IndexPath>.Block) -> Destroyable {
+        let observerBlock = InternalDestroyableOneParameterObserver<T, IndexPath>(object: self,
+                                                                                  block: ObserverBlock(object: closure))
+        managedObjectObservers.append((ObserverIdentifier.updated, observerBlock))
+        return observerBlock
     }
 }
 
@@ -84,7 +168,7 @@ final class ManagedObjectProvider: ObjectProvider {
         super.init()
     }
     
-    override func observable<T: NSManagedObject>(where query: Query) -> Observable<[T]>? {
+    public func managedObservable<T: NSManagedObject>(where query: Query) -> ManagedObjectObservable<T>? {
         guard let query = query as? ManagedObjectQuery,
             let entityName = NSStringFromClass(query.entity.self).components(separatedBy: ".").last else {
                 assertionFailure("Expecting ManagedObjectStore.ManagedObjectQuery as closure parameter")
@@ -108,32 +192,31 @@ final class ManagedObjectProvider: ObjectProvider {
         } else {
             guard let entityDescription =
                 NSEntityDescription.entity(forEntityName: NSStringFromClass(T.self), in: managedObjectContext) else {
-                return nil
+                    return nil
             }
             
             return T(entity: entityDescription,
-                            insertInto: managedObjectContext)
+                     insertInto: managedObjectContext)
         }
     }
 }
 
 final public class SqliteStorage<T: NSManagedObject>: Storage {
-
-    private(set) public var provider: ObjectProvider = ObjectProvider()
+    
+    private(set) public var provider = ObjectProvider()
     
     private let momdName: String
     private let sqlFileUrl: URL?
     
     public init(_ momdName: String,
-         sqlFileUrl: URL? = nil) {
+                sqlFileUrl: URL? = nil) {
         self.momdName = momdName
         self.sqlFileUrl = sqlFileUrl
+        createProvider()
     }
     
-    public func createProvider() -> SqliteStorage<T> {
-        let managedObjectContext = self.managedObjectContext
-        provider = ManagedObjectProvider(managedObjectContext)
-        return self
+    private func createProvider() {
+        provider = ManagedObjectProvider(self.managedObjectContext)
     }
     
     lazy var managedObjectContext: NSManagedObjectContext = {

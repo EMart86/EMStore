@@ -14,6 +14,34 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Xcode 9.4.1
 Swift 4.1
 
+## New In 1.2.0
+
+You can now observe when a value has been inserted/added, removed, moved or updated.
+All you have to do is to change the line in your Store Protocol from  ```var model: Observable<[Entry]>? { get }```  to  ```var entities: ManagedObjectObservable<[Entry]>? { get }``` or simply access the stores entitities with the parameter ```entities```. Of course you can still observe the complete entities with 
+```onValueChanged { allEntities in ... }```
+
+Here is an example.
+
+```swift
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        //..
+        store.entries?.onItemAdded { entity, indexPath in
+            //... entity has been added
+        }
+        store.entries?.onItemRemoved { entity, indexPath in
+            //... entity has been removed
+        }
+        store.entries?.onItemUpdated { entity, indexPath in
+            //... entity has been updated
+        }
+        store.entries?.onItemMoved { entity, from, to in
+            //... entity has been moved
+        }
+    }
+```
+
 ## Installation
 
 EMStore is available through [CocoaPods](http://cocoapods.org). To install
@@ -34,7 +62,7 @@ protocol EntryStore {
 
 final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
     init() {
-        super.init(storage: SqliteStorage<Entry>("Model").createProvider(),
+        super.init(storage: SqliteStorage<Entry>("Model"),
         predicate: nil,
         sortDescriptors: [NSSortDescriptor(key: "date", ascending: true)])
     }
@@ -68,7 +96,7 @@ override func viewDidLoad() {
 
     //..
     store.entries?.onValueChanged { _ in
-        //... update thee table- or collectionview .. or what ever you want to do with the content
+        //... update the table- or collectionview .. or what ever you want to do with the content
     }
 }
 ```

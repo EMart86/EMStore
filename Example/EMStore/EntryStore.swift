@@ -9,7 +9,7 @@ import EMStore
 import Foundation
 
 protocol EntryStore {
-    var models: Observable<[Entry]>? { get }
+    var entities: ManagedObjectObservable<Entry>? { get }
     var new: Entry? { get }
     func add(model: Entry)
     func remove(model: Entry)
@@ -17,7 +17,7 @@ protocol EntryStore {
 
 final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
     init() {
-        super.init(storage: SqliteStorage<Entry>("Model").createProvider(),
+        super.init(storage: SqliteStorage<Entry>("Model"),
                    predicate: nil,
                    sortDescriptors: [NSSortDescriptor(key: "date", ascending: true)])
     }

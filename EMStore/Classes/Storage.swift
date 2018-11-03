@@ -13,7 +13,7 @@ public protocol Query {
 }
 
 public class ObjectProvider {
-    public func observable<T>(where query: Query) -> Observable<[T]>? {
+    public func observable<T, Type: Observable<T>>(where query: Query) -> Type? {
         return nil
     }
     

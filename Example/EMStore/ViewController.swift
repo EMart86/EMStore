@@ -17,11 +17,24 @@ class StoreProvider {
 class ViewController: UITableViewController {
     
     let provider = StoreProvider()
+    private var itemHasBeenUpdated = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        provider.storeProvider?.models?.onValueChanged {[weak tableView = self.tableView] _ in
+        provider.storeProvider?.entities?.onItemAdded { value, _ in
+            print("\(value) has been added")
+        }
+        
+        provider.storeProvider?.entities?.onItemRemoved { value, _ in
+            print("\(value) has been removed")
+        }
+        
+        provider.storeProvider?.entities?.onItemUpdated { value, _ in
+            print("\(value) has been updated")
+        }
+        
+        provider.storeProvider?.entities?.onValueChanged {[weak tableView = self.tableView] _ in
             tableView?.reloadData()
         }
     }
@@ -32,6 +45,21 @@ class ViewController: UITableViewController {
     }
 
     @IBAction func onCreatePressed(_ sender: Any) {
+        guard let item = provider.storeProvider?.entities?.value?.first else {
+            insertNewItem()
+            itemHasBeenUpdated = false
+            return
+        }
+        if !itemHasBeenUpdated {
+            item.date = Date()
+            itemHasBeenUpdated = true
+        } else {
+            provider.storeProvider?.remove(model: item)
+            itemHasBeenUpdated = false
+        }
+    }
+    
+    private func insertNewItem() {
         guard let entry = provider.storeProvider?.new else {
             return
         }
@@ -41,12 +69,12 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return provider.storeProvider!.models?.value?.count ?? 0
+        return provider.storeProvider!.entities?.value?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "")
-        cell.textLabel?.text = String(describing: provider.storeProvider?.models?.value?[indexPath.row].date)
+        cell.textLabel?.text = String(describing: provider.storeProvider?.entities?.value?[indexPath.row].date)
         return cell
     }
 }

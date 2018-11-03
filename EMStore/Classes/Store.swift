@@ -10,7 +10,6 @@ import Foundation
 
 public protocol Store {
     associatedtype Model
-    var models: Observable<[Model]>? { get }
     var storage: Storage { get }
     var new: Model? { get }
     

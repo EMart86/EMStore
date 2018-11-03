@@ -9,3 +9,7 @@ target 'EMStore_Example' do
     
   end
 end
+
+target 'EMStore_TV' do
+    pod 'EMStore', :path => '../'
+end

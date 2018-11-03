@@ -13,49 +13,107 @@ public protocol Destroyable {
     func destroy()
 }
 
-public func ==(lhs: Destroyable, rhs: Destroyable) -> Bool {
-    return lhs.identifier == rhs.identifier
-}
-
 public struct ObserverBlock<T> {
-    private(set) var object: T?
+    let object: T
     init(object: T) {
         self.object = object
     }
 }
 
-public struct DestroyableObserver<T>: Destroyable {
-    private var object: Observable<T>
-    private(set) var block:  ObserverBlock<(T) -> Void>?
+public struct ObserverIdentifier {
+    static let added = "added"
+    static let removed = "removed"
+    static let updated = "updated"
+    static let moved = "moved"
+}
+
+public class InternalDestroyableTwoParameterObserver<M, N, O>: Destroyable {
+    
+    public typealias Block = (M, N, O) -> Void
+    
+    private let object: DestroyableObserver
+    private let parameters: Array<Any>?
+    private(set) var block: ObserverBlock<Block>?
     public let identifier = Date()
     
-    init(object: Observable<T>, block: ObserverBlock<(T) -> Void>) {
+    init(object: DestroyableObserver, param: [Any]? = nil, block: ObserverBlock<Block>?) {
         self.object = object
         self.block = block
+        self.parameters = param
     }
     
     public func destroy() {
+        block = nil
         object.destroy(destroyable: self)
     }
 }
 
-public class Observable<T>: NSObject {
-    internal var observers = [DestroyableObserver<T>]()
+public class InternalDestroyableOneParameterObserver<M, N>: Destroyable {
+    
+    public typealias Block = (M, N) -> Void
+    
+    private let object: DestroyableObserver
+    private let parameters: Array<Any>?
+    private(set) var block: ObserverBlock<Block>?
+    public let identifier = Date()
+    
+    init(object: DestroyableObserver, param: [Any]? = nil, block: ObserverBlock<Block>?) {
+        self.object = object
+        self.block = block
+        self.parameters = param
+    }
+    
+    public func destroy() {
+        block = nil
+        object.destroy(destroyable: self)
+    }
+}
 
-    public var value: T? {
+public class InternalDestroyableObserver<M>: Destroyable {
+    
+    public typealias Block = (M) -> Void
+    
+    private let object: DestroyableObserver
+    private let parameters: Array<Any>?
+    private(set) var block: ObserverBlock<Block>?
+    public let identifier = Date()
+    
+    init(object: DestroyableObserver, param: [Any]? = nil, block: ObserverBlock<Block>?) {
+        self.object = object
+        self.block = block
+        self.parameters = param
+    }
+    
+    public func destroy() {
+        block = nil
+        object.destroy(destroyable: self)
+    }
+}
+
+public protocol DestroyableObserver {
+    func destroy(destroyable: Destroyable)
+}
+
+open class Observable<Value>: NSObject, DestroyableObserver {
+    internal var observers = [InternalDestroyableObserver<Value>]()
+    
+    public var value: Value? {
         didSet {
-            notifyObservers()
+            notifyObserversValueChanged()
         }
     }
     
-    public func onValueChanged(_ closure: @escaping (T) -> Void) -> Destroyable {
-        let observerBlock = DestroyableObserver<T>(object: self, block: ObserverBlock<(T) -> Void>(object: closure))
+    public func onValueChanged(_ closure: @escaping InternalDestroyableObserver<Value>.Block) -> Destroyable {
+        let observerBlock = InternalDestroyableObserver<Value>(object: self,
+                                                               param: nil,
+                                                               block: ObserverBlock(object: closure)
+        )
         observers.append(observerBlock)
         return observerBlock
     }
     
-    internal func destroy(destroyable: Destroyable) {
-        guard let index = observers.index(where: { return $0 == destroyable } ) else {
+    public func destroy(destroyable: Destroyable) {
+        guard let index = observers.firstIndex(where: { $0.identifier == destroyable.identifier } ) else {
             return
         }
         
@@ -64,10 +122,10 @@ public class Observable<T>: NSObject {
     
     //MARK: - Private
     
-    private func notifyObservers() {
+    private func notifyObserversValueChanged() {
         guard let value = value else { return }
         observers
-            .flatMap { $0.block?.object }
+            .compactMap { $0.block?.object }
             .forEach { $0(value) }
     }
 }

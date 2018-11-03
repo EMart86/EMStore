@@ -24,7 +24,7 @@ With thos library, you don't need to write all this ManagedObjectContext and Per
 
   s.ios.deployment_target = '8.0'
   s.tvos.deployment_target = '10.0'
-  s.osx.deployment_target = '10.12'
+#s.osx.deployment_target = '10.12'
 
   s.source_files = 'EMStore/Classes/**/*'
 end

@@ -1,6 +1,6 @@
 # EMStore
 
-[![CI Status](http://img.shields.io/travis/eberl_ma@gmx.at/EMStore.svg?style=flat)](https://travis-ci.org/eberl_ma@gmx.at/EMStore)
+[![CI Status](http://img.shields.io/travis/EMart86/EMStore.svg?style=flat)](https://travis-ci.org/EMart86/EMStore)
 [![Version](https://img.shields.io/cocoapods/v/EMStore.svg?style=flat)](http://cocoapods.org/pods/EMStore)
 [![License](https://img.shields.io/cocoapods/l/EMStore.svg?style=flat)](http://cocoapods.org/pods/EMStore)
 [![Platform](https://img.shields.io/cocoapods/p/EMStore.svg?style=flat)](http://cocoapods.org/pods/EMStore)

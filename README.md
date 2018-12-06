@@ -14,6 +14,20 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Xcode 9.4.1
 Swift 4.1
 
+## New In 1.3.0
+
+If you won't enter a sql file, it will be provided for you. 
+This is the actual implementation:
+
+```guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+.userDomainMask, true).first else {
+    throw SqlFile.filePathNotFound
+}
+return URL(fileURLWithPath: path).appendingPathComponent("content.sqlite")
+```
+Eventually if it can't be created, it throws an error.
+
+
 ## New In 1.2.0
 
 You can now observe when a value has been inserted/added, removed, moved or updated.

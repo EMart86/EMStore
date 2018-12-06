@@ -14,6 +14,10 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Xcode 9.4.1
 Swift 4.1
 
+## New In 1.3.1
+
+Reverted the throws block but a default sql file path url is being provided, if you won't provide any
+
 ## New In 1.3.0
 
 If you won't enter a sql file, it will be provided for you. 

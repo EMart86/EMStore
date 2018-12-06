@@ -16,8 +16,8 @@ protocol EntryStore {
 }
 
 final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
-    init() throws {
-        super.init(storage: try SqliteStorage<Entry>("Model"),
+    init() {
+        super.init(storage: SqliteStorage<Entry>("Model"),
                    predicate: nil,
                    sortDescriptors: [NSSortDescriptor(key: "date", ascending: true)])
     }

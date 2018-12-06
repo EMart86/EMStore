@@ -201,14 +201,10 @@ final class ManagedObjectProvider: ObjectProvider {
     }
 }
 
-public func sqlStorageFileUrl() throws -> URL  {
-    enum SqlFile: Error {
-        case filePathNotFound
-    }
-    
+public var sqlStorageFileUrl: URL?  {
     guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                          .userDomainMask, true).first else {
-                                                            throw SqlFile.filePathNotFound
+                                                            return nil
     }
     
     return URL(fileURLWithPath: path).appendingPathComponent("content.sqlite")
@@ -218,16 +214,12 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     private(set) public var provider = ObjectProvider()
     
     private let momdName: String
-    private let sqlFileUrl: URL
+    private let sqlFileUrl: URL?
     
     public init(_ momdName: String,
-                sqlFileUrl: URL? = nil) throws {
+                sqlFileUrl: URL? = sqlStorageFileUrl) {
         self.momdName = momdName
-        if let sqlFileUrl = sqlFileUrl {
-            self.sqlFileUrl = sqlFileUrl
-        } else {
-            self.sqlFileUrl = try sqlStorageFileUrl()
-        }
+        self.sqlFileUrl = sqlFileUrl
         createProvider()
     }
     
@@ -286,7 +278,9 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     @available(iOS 10.0, *)
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: self.momdName)
-        container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: sqlFileUrl)]
+        if let pathUrl = self.sqlFileUrl {
+            container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: pathUrl)]
+        }
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -296,8 +290,9 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     }()
     
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
-        guard let model = NSManagedObjectModel(contentsOf: sqlFileUrl) else {
-            return nil
+        guard let pathUrl = self.sqlFileUrl,
+            let model = NSManagedObjectModel(contentsOf: pathUrl) else {
+                return nil
         }
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         do {

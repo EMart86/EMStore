@@ -290,7 +290,9 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     }()
     
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
-        guard let pathUrl = self.sqlFileUrl,
+        guard let bundle = Bundle.allBundles.first(where: { bundle in
+            bundle.url(forResource: momdName, withExtension: "momd") != nil }),
+            let pathUrl = bundle.url(forResource: momdName, withExtension: "momd"),
             let model = NSManagedObjectModel(contentsOf: pathUrl) else {
                 return nil
         }

@@ -201,17 +201,33 @@ final class ManagedObjectProvider: ObjectProvider {
     }
 }
 
-final public class SqliteStorage<T: NSManagedObject>: Storage {
+public func sqlStorageFileUrl() throws -> URL  {
+    enum SqlFile: Error {
+        case filePathNotFound
+    }
     
+    guard let path = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                         .userDomainMask, true).first else {
+                                                            throw SqlFile.filePathNotFound
+    }
+    
+    return URL(fileURLWithPath: path).appendingPathComponent("content.sqlite")
+}
+
+final public class SqliteStorage<T: NSManagedObject>: Storage {    
     private(set) public var provider = ObjectProvider()
     
     private let momdName: String
-    private let sqlFileUrl: URL?
+    private let sqlFileUrl: URL
     
     public init(_ momdName: String,
-                sqlFileUrl: URL? = nil) {
+                sqlFileUrl: URL? = nil) throws {
         self.momdName = momdName
-        self.sqlFileUrl = sqlFileUrl
+        if let sqlFileUrl = sqlFileUrl {
+            self.sqlFileUrl = sqlFileUrl
+        } else {
+            self.sqlFileUrl = try sqlStorageFileUrl()
+        }
         createProvider()
     }
     
@@ -270,9 +286,7 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     @available(iOS 10.0, *)
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: self.momdName)
-        if let pathUrl = self.sqlFileUrl {
-            container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: pathUrl)]
-        }
+        container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: sqlFileUrl)]
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -282,9 +296,8 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     }()
     
     private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
-        guard let pathUrl = self.sqlFileUrl,
-            let model = NSManagedObjectModel(contentsOf: pathUrl) else {
-                return nil
+        guard let model = NSManagedObjectModel(contentsOf: sqlFileUrl) else {
+            return nil
         }
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         do {

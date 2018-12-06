@@ -10,7 +10,7 @@ import UIKit
 
 class StoreProvider {
     lazy var storeProvider: EntryStore? = {
-       return DefaultEntryStore()
+       return try? DefaultEntryStore()
     }()
 }
 

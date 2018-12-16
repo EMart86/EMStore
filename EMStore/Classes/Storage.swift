@@ -40,4 +40,12 @@ extension Store where Model: NSManagedObject {
         storage.remove(model: model)
         storage.commit()
     }
+    
+    public func commit() {
+        storage.commit()
+    }
+    
+    public func rollback() {
+        storage.rollback()
+    }
 }

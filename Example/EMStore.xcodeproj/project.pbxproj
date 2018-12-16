@@ -21,6 +21,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		72C34A434EEEF5CFBC975907 /* Pods_EMStore_TV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C935E4D08AC8B2D0739256D8 /* Pods_EMStore_TV.framework */; };
 		8CFA7B495E577EF59B4E0EAE /* Pods_EMStore_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9190E299E4215D0A164B92BF /* Pods_EMStore_Example.framework */; };
 		9F3B9E35F0D10ED49057EB07 /* Pods_EMStore_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D527B838EB428A437F094E60 /* Pods_EMStore_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -73,12 +74,15 @@
 		607FACE51AFB9204008FA782 /* EMStore_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EMStore_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		649009F282A0FCA121480161 /* Pods-EMStore_TV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMStore_TV.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EMStore_TV/Pods-EMStore_TV.debug.xcconfig"; sourceTree = "<group>"; };
 		6D85A56282DB56D293F9F03E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9190E299E4215D0A164B92BF /* Pods_EMStore_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMStore_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5AF3030D29074E948E0EB0D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		BA591B012916699A25F36363 /* Pods-EMStore_TV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMStore_TV.release.xcconfig"; path = "Pods/Target Support Files/Pods-EMStore_TV/Pods-EMStore_TV.release.xcconfig"; sourceTree = "<group>"; };
 		BA61DB15D3DDC8235CDCE955 /* Pods-EMStore_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMStore_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EMStore_Tests/Pods-EMStore_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		C19E16CCD841091F99B495D7 /* Pods-EMStore_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMStore_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EMStore_Example/Pods-EMStore_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		C69049BDDBEDFEF56B15FEA3 /* EMStore.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = EMStore.podspec; path = ../EMStore.podspec; sourceTree = "<group>"; };
+		C69049BDDBEDFEF56B15FEA3 /* EMStore.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = EMStore.podspec; path = ../EMStore.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C935E4D08AC8B2D0739256D8 /* Pods_EMStore_TV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMStore_TV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D527B838EB428A437F094E60 /* Pods_EMStore_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EMStore_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5909506B617A0D12F9242B3 /* Pods-EMStore_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EMStore_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EMStore_Tests/Pods-EMStore_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -88,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72C34A434EEEF5CFBC975907 /* Pods_EMStore_TV.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +136,8 @@
 				568735B1633BC1CE07DAEC20 /* Pods-EMStore_Example.release.xcconfig */,
 				BA61DB15D3DDC8235CDCE955 /* Pods-EMStore_Tests.debug.xcconfig */,
 				D5909506B617A0D12F9242B3 /* Pods-EMStore_Tests.release.xcconfig */,
+				649009F282A0FCA121480161 /* Pods-EMStore_TV.debug.xcconfig */,
+				BA591B012916699A25F36363 /* Pods-EMStore_TV.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -140,6 +147,7 @@
 			children = (
 				9190E299E4215D0A164B92BF /* Pods_EMStore_Example.framework */,
 				D527B838EB428A437F094E60 /* Pods_EMStore_Tests.framework */,
+				C935E4D08AC8B2D0739256D8 /* Pods_EMStore_TV.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -257,9 +265,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 58CFB14A2180E268003006F6 /* Build configuration list for PBXNativeTarget "EMStore_TV" */;
 			buildPhases = (
+				41475A75BE37F9012EB9E956 /* [CP] Check Pods Manifest.lock */,
 				58CFB11E2180E263003006F6 /* Sources */,
 				58CFB11F2180E263003006F6 /* Frameworks */,
 				58CFB1202180E263003006F6 /* Resources */,
+				BB0390FB93040056683311DD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -315,7 +325,6 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				945FE00A7431873A60FEDF51 /* [CP] Embed Pods Frameworks */,
-				A3A3219DBCF2E3817C0F8D9F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -334,8 +343,6 @@
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				01B1776A02F1D07499DDE88A /* [CP] Embed Pods Frameworks */,
-				E8E0D14B16344A5C2C2EDE7C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -451,34 +458,40 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		01B1776A02F1D07499DDE88A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EMStore_Tests/Pods-EMStore_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		17BE96D2ED511E445C89FA5C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EMStore_Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		41475A75BE37F9012EB9E956 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EMStore_TV-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		945FE00A7431873A60FEDF51 /* [CP] Embed Pods Frameworks */ = {
@@ -487,28 +500,34 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-EMStore_Example/Pods-EMStore_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/EMStore-iOS/EMStore.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EMStore.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EMStore_Example/Pods-EMStore_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A3A3219DBCF2E3817C0F8D9F /* [CP] Copy Pods Resources */ = {
+		BB0390FB93040056683311DD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-EMStore_TV/Pods-EMStore_TV-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/EMStore-tvOS/EMStore.framework",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EMStore.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EMStore_Example/Pods-EMStore_Example-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EMStore_TV/Pods-EMStore_TV-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E0D16EB46340E27C1716B11B /* [CP] Check Pods Manifest.lock */ = {
@@ -517,28 +536,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EMStore_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		E8E0D14B16344A5C2C2EDE7C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-EMStore_Tests/Pods-EMStore_Tests-resources.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -638,6 +645,7 @@
 /* Begin XCBuildConfiguration section */
 		58CFB1442180E268003006F6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 649009F282A0FCA121480161 /* Pods-EMStore_TV.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -673,6 +681,7 @@
 		};
 		58CFB1452180E268003006F6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA591B012916699A25F36363 /* Pods-EMStore_TV.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

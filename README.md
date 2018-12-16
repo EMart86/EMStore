@@ -14,6 +14,14 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Xcode 9.4.1
 Swift 4.1
 
+## New In 1.4.0
+
+Added
+``` store.commit()
+  store.rollback()
+```  
+
+
 ## New In 1.3.2
 
 Fix store coordinator with iOS9 and lower

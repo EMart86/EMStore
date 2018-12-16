@@ -13,6 +13,8 @@ protocol EntryStore {
     var new: Entry? { get }
     func add(model: Entry)
     func remove(model: Entry)
+    func commit()
+    func rollback()
 }
 
 final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {

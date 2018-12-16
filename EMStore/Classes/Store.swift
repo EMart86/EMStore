@@ -15,4 +15,6 @@ public protocol Store {
     
     func add(model: Model)
     func remove(model: Model)
+    func commit()
+    func rollback()
 }

@@ -25,6 +25,8 @@ public struct ObserverIdentifier {
     static let removed = "removed"
     static let updated = "updated"
     static let moved = "moved"
+    static let completed = "completed"
+    static let beginning = "beginning"
 }
 
 public class InternalDestroyableTwoParameterObserver<M, N, O>: Destroyable {

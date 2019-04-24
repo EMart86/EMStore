@@ -19,7 +19,7 @@ open class ManagedObjectStore<AnyManagedObject: NSManagedObject>: Store {
     public typealias Model = AnyManagedObject
     
     open lazy var models: Observable<[Model]>? = {
-        return (storage.provider as? ManagedObjectProvider)?.managedObservable(where: 
+        return (storage.provider as? ManagedObjectProvider)?.managedObservable(where:
             ManagedObjectQuery(entity: Model.self,
                                predicate: self.predicate,
                                sortDescriptors: self.sortDescriptors)
@@ -83,11 +83,17 @@ public final class ManagedObjectObservable<T: NSManagedObject>: Observable<[T]>,
     }
     
     public func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("")
+        managedObjectObservers
+            .filter { $0.0 == ObserverIdentifier.beginning }
+            .compactMap { $0.1 as? InternalDestroyableObserver<Any?> }
+            .forEach { $0.block?.object(nil) }
     }
     
     public func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("")
+        managedObjectObservers
+            .filter { $0.0 == ObserverIdentifier.completed }
+            .compactMap { $0.1 as? InternalDestroyableObserver<Any?> }
+            .forEach { $0.block?.object(nil) }
     }
     
     public func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -159,6 +165,20 @@ extension ManagedObjectObservable {
         managedObjectObservers.append((ObserverIdentifier.updated, observerBlock))
         return observerBlock
     }
+    
+    public func onBeginning(_ closure: @escaping InternalDestroyableObserver<Any?>.Block) -> Destroyable {
+        let observerBlock = InternalDestroyableObserver<Any?>(object: self,
+                                                              block: ObserverBlock(object: closure))
+        managedObjectObservers.append((ObserverIdentifier.beginning, observerBlock))
+        return observerBlock
+    }
+    
+    public func onComplete(_ closure: @escaping InternalDestroyableObserver<Any?>.Block) -> Destroyable {
+        let observerBlock = InternalDestroyableObserver<Any?>(object: self,
+                                                              block: ObserverBlock(object: closure))
+        managedObjectObservers.append((ObserverIdentifier.completed, observerBlock))
+        return observerBlock
+    }
 }
 
 final class ManagedObjectProvider: ObjectProvider {
@@ -210,8 +230,14 @@ public var sqlStorageFileUrl: URL?  {
     return URL(fileURLWithPath: path).appendingPathComponent("content.sqlite")
 }
 
-final public class SqliteStorage<T: NSManagedObject>: Storage {    
+@available(iOS 10.0, *)
+var sharedPersistentContainer: NSPersistentContainer?
+var sharedManagedContext: NSManagedObjectContext?
+
+final public class SqliteStorage<T: NSManagedObject>: Storage {
     private(set) public var provider = ObjectProvider()
+    
+    
     
     private let momdName: String
     private let sqlFileUrl: URL?
@@ -228,10 +254,16 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     }
     
     lazy var managedObjectContext: NSManagedObjectContext = {
+        if let sharedManagedContext = sharedManagedContext {
+            return sharedManagedContext
+        }
         if #available(iOS 10.0, *) {
-            return self.persistentContainer.viewContext
+            let context = self.persistentContainer.viewContext
+            sharedManagedContext = context
+            return context
         } else {
             var context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            sharedManagedContext = context
             context.persistentStoreCoordinator = self.persistentStoreCoordinator
             return context
         }
@@ -274,10 +306,13 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
     }
     
     //MARK: - Helper
-    
     @available(iOS 10.0, *)
     private lazy var persistentContainer: NSPersistentContainer = {
+        if let sharedPersistentContainer = sharedPersistentContainer {
+            return sharedPersistentContainer
+        }
         let container = NSPersistentContainer(name: self.momdName)
+        sharedPersistentContainer = container
         if let pathUrl = self.sqlFileUrl {
             container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: pathUrl)]
         }

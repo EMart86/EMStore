@@ -132,6 +132,8 @@ public final class ManagedObjectObservable<T: NSManagedObject>: Observable<[T]>,
                 .filter { $0.0 == ObserverIdentifier.updated }
                 .compactMap { $0.1 as? InternalDestroyableOneParameterObserver<T, IndexPath> }
                 .forEach { $0.block?.object(anObject, indexPath) }
+        @unknown default:
+            break
         }
         
     }
@@ -232,13 +234,14 @@ public var sqlStorageFileUrl: URL?  {
 
 @available(iOS 10.0, *)
 var sharedPersistentContainer: NSPersistentContainer?
+@available(tvOS 13.0, *)
+@available(iOS 13.0, *)
+var sharedCloudPersistentContainer: NSPersistentCloudKitContainer?
 var sharedManagedContext: NSManagedObjectContext?
 
 final public class SqliteStorage<T: NSManagedObject>: Storage {
     private(set) public var provider = ObjectProvider()
-    
-    
-    
+
     private let momdName: String
     private let sqlFileUrl: URL?
     
@@ -283,25 +286,15 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
         managedObjectContext.delete(model)
     }
     
-    public func commit() {
+    public func commit() throws {
         if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+            try managedObjectContext.save()
         }
     }
     
-    public func rollback() {
+    public func rollback() throws {
         if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.rollback()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+            try managedObjectContext.rollback()
         }
     }
     
@@ -316,6 +309,104 @@ final public class SqliteStorage<T: NSManagedObject>: Storage {
         if let pathUrl = self.sqlFileUrl {
             container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: pathUrl)]
         }
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
+    private lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
+        guard let bundle = Bundle.allBundles.first(where: { bundle in
+            bundle.url(forResource: momdName, withExtension: "momd") != nil }),
+            let pathUrl = bundle.url(forResource: momdName, withExtension: "momd"),
+            let model = NSManagedObjectModel(contentsOf: pathUrl) else {
+                return nil
+        }
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+        do {
+            // If your looking for any kind of migration then here is the time to pass it to the options
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: self.sqlFileUrl, options: nil)
+        } catch let  error as NSError {
+            print("Ops there was an error \(error.localizedDescription)")
+            abort()
+        }
+        return coordinator
+    }()
+}
+
+@available(tvOS 13.0, *)
+@available(iOS 13.0, *)
+final public class CloudKitSqliteStorage<T: NSManagedObject>: Storage {
+    private(set) public var provider = ObjectProvider()
+
+    private let momdName: String
+    private let containerId: String
+    private let sqlFileUrl: URL?
+    
+    public init(_ momdName: String,
+                containerId: String,
+                sqlFileUrl: URL? = sqlStorageFileUrl) {
+        self.momdName = momdName
+        self.containerId = containerId
+        self.sqlFileUrl = sqlFileUrl
+        createProvider()
+    }
+    
+    private func createProvider() {
+        provider = ManagedObjectProvider(self.managedObjectContext)
+    }
+    
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        if let sharedManagedContext = sharedManagedContext {
+            return sharedManagedContext
+        }
+        let context = self.cloudKitContainer.viewContext
+        sharedManagedContext = context
+        return context
+    }()
+    
+    public func insert(model: Any) {
+        guard let model = model as? NSManagedObject else {
+            return
+        }
+        managedObjectContext.insert(model)
+    }
+    
+    public func remove(model: Any) {
+        guard let model = model as? NSManagedObject else {
+            return
+        }
+        managedObjectContext.delete(model)
+    }
+    
+    public func commit() throws {
+        if managedObjectContext.hasChanges {
+            try managedObjectContext.save()
+        }
+    }
+    
+    public func rollback() throws {
+        if managedObjectContext.hasChanges {
+            try managedObjectContext.rollback()
+        }
+    }
+    
+    //MARK: - Helper
+    @available(tvOS 13.0, *)
+    @available(iOS 13.0, *)
+    private lazy var cloudKitContainer: NSPersistentCloudKitContainer = {
+        if let sharedPersistentContainer = sharedCloudPersistentContainer {
+            return sharedPersistentContainer
+        }
+        let container = NSPersistentCloudKitContainer(name: self.momdName)
+        sharedCloudPersistentContainer = container
+        if let pathUrl = self.sqlFileUrl {
+            container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: pathUrl)]
+            container.persistentStoreDescriptions.first?.cloudKitContainerOptions =  NSPersistentCloudKitContainerOptions(containerIdentifier: containerId)
+        }
+//        try? container.initializeCloudKitSchema()
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")

@@ -12,7 +12,16 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 ## Requirements
 
 Xcode 9.4.1
-Swift 4.1
+Swift 5.0
+
+## New In 1.6.0
+
+* Added Cloud Kit Support
+
+## New In 1.5.0
+
+* Update Swift 5
+* Fix relationship between models did not work
 
 ## New In 1.4.0
 

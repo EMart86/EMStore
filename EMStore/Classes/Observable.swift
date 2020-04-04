@@ -25,6 +25,8 @@ public struct ObserverIdentifier {
     static let removed = "removed"
     static let updated = "updated"
     static let moved = "moved"
+    static let completed = "completed"
+    static let beginning = "beginning"
 }
 
 public class InternalDestroyableTwoParameterObserver<M, N, O>: Destroyable {
@@ -92,6 +94,36 @@ public class InternalDestroyableObserver<M>: Destroyable {
 
 public protocol DestroyableObserver {
     func destroy(destroyable: Destroyable)
+}
+
+open class GarbageCollector {
+    private var destroyables: [Destroyable]
+    
+    public convenience init(_ destroyable: Destroyable?) {
+        if let destroyable = destroyable {
+            self.init([destroyable])
+        } else {
+            self.init()
+        }
+    }
+    
+    public init(_ destroyables: [Destroyable] = []) {
+        self.destroyables = destroyables
+    }
+    
+    open func append(_ destroyable: Destroyable?) {
+        guard let destroyable = destroyable else {
+            return
+        }
+        destroyables.append(destroyable)
+    }
+    
+    open func destroy() {
+        for destroyable in destroyables {
+            destroyable.destroy()
+        }
+        destroyables.removeAll()
+    }
 }
 
 open class Observable<Value>: NSObject, DestroyableObserver {

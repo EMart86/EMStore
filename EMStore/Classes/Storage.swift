@@ -26,26 +26,26 @@ public protocol Storage {
     var provider: ObjectProvider { get }
     func insert(model: Any)
     func remove(model: Any)
-    func commit()
-    func rollback()
+    func commit() throws
+    func rollback() throws
 }
 
 extension Store where Model: NSManagedObject {
-    public func add(model: Model) {
+    public func add(model: Model) throws {
         storage.insert(model: model)
-        storage.commit()
+        try storage.commit()
     }
     
-    public func remove(model: Model) {
+    public func remove(model: Model) throws {
         storage.remove(model: model)
-        storage.commit()
+        try storage.commit()
     }
     
-    public func commit() {
-        storage.commit()
+    public func commit() throws {
+        try storage.commit()
     }
     
-    public func rollback() {
-        storage.rollback()
+    public func rollback() throws {
+        try storage.rollback()
     }
 }

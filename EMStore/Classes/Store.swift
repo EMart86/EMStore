@@ -13,8 +13,9 @@ public protocol Store {
     var storage: Storage { get }
     var new: Model? { get }
     
-    func add(model: Model)
-    func remove(model: Model)
-    func commit()
-    func rollback()
+    func add(model: Model) throws
+    func remove(model: Model) throws
+    func commit() throws
+    func rollback() throws
 }
+

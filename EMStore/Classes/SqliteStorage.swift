@@ -363,6 +363,8 @@ final public class CloudKitSqliteStorage<T: NSManagedObject>: Storage {
             return sharedManagedContext
         }
         let context = self.cloudKitContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        try? context.setQueryGenerationFrom(.current)
         sharedManagedContext = context
         return context
     }()

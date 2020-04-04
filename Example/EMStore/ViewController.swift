@@ -12,6 +12,10 @@ class StoreProvider {
     lazy var storeProvider: EntryStore? = {
        return try? DefaultEntryStore()
     }()
+    
+    lazy var cloudProvider: EntryStore? = {
+        return try? CloudEntryStore()
+    }()
 }
 
 class ViewController: UITableViewController {
@@ -54,7 +58,7 @@ class ViewController: UITableViewController {
             item.date = Date()
             itemHasBeenUpdated = true
         } else {
-            provider.storeProvider?.remove(model: item)
+            try? provider.storeProvider?.remove(model: item)
             itemHasBeenUpdated = false
         }
     }
@@ -65,7 +69,7 @@ class ViewController: UITableViewController {
         }
         
         entry.date = Date()
-        provider.storeProvider?.add(model: entry)
+        try? provider.storeProvider?.add(model: entry)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -18,4 +18,3 @@ public protocol Store {
     func commit() throws
     func rollback() throws
 }
-

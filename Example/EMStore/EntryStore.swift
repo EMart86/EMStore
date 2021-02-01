@@ -13,13 +13,14 @@ protocol EntryStore {
     var new: Entry? { get }
     func add(model: Entry) throws
     func remove(model: Entry) throws
-    func commit()
-    func rollback()
+    func commit() throws
+    func rollback() throws
 }
 
 final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
+    
     init() {
-        super.init(storage: SqliteStorage<Entry>("Model"),
+        super.init(storage: SqliteStorage<Entry>.shared(momdName: "Model"),
                    predicate: nil,
                    sortDescriptors: [NSSortDescriptor(key: "date", ascending: true)])
     }
@@ -28,11 +29,11 @@ final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
 final class CloudEntryStore: ManagedObjectStore<Entry>, EntryStore {
     init() {
         if #available(iOS 13.0, *) {
-            super.init(storage: CloudKitSqliteStorage<Entry>("Model", containerId: "iCloud.<bundle id>"),
+            super.init(storage: CloudKitSqliteStorage<Entry>.shared(momdName: "Model", containerId: "iCloud.<bundle id>", migrateWithCloud: false),
                        predicate: nil,
                        sortDescriptors: [NSSortDescriptor(key: "date", ascending: true)])
         } else {
-            super.init(storage: SqliteStorage<Entry>("Model"),
+            super.init(storage: SqliteStorage<Entry>.shared(momdName: "Model"),
                        predicate: nil,
                        sortDescriptors: [NSSortDescriptor(key: "date", ascending: true)])
         }

@@ -17,6 +17,7 @@ Swift 5.0
 ## New In 1.6.0
 
 * Added Cloud Kit Support
+* Requires commit to be performed now manually, now you have control of when your content is being commited
 
 ## New In 1.5.0
 
@@ -110,12 +111,12 @@ final class DefaultEntryStore: ManagedObjectStore<Entry>, EntryStore {
 
 Now setup the store just like follows
 ```swift
-let store: EntryStore = DefaultEntryStore()
+let store = DefaultEntryStore()
 ```
 
 To access the content of a store is farely easy
 ```swift
-let fetched content = store.entries?.value
+let fetchedContent = store.entries?.value
 ```
 
 To add a new content to a store is again very easy

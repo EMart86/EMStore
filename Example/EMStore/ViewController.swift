@@ -56,7 +56,7 @@ class ViewController: UITableViewController {
         }
         if !itemHasBeenUpdated {
             item.date = Date()
-            provider.storeProvider?.commit()
+            try? provider.storeProvider?.commit()
             itemHasBeenUpdated = true
         } else {
             try? provider.storeProvider?.remove(model: item)

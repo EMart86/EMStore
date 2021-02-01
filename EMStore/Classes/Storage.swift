@@ -17,7 +17,7 @@ public class ObjectProvider {
         return nil
     }
     
-    public func new<T>() -> T?{
+    public func new<T>(type: T.Type) -> T?{
         return nil
     }
 }
@@ -33,12 +33,12 @@ public protocol Storage {
 extension Store where Model: NSManagedObject {
     public func add(model: Model) throws {
         storage.insert(model: model)
-        try storage.commit()
+        //try storage.commit()
     }
     
     public func remove(model: Model) throws {
         storage.remove(model: model)
-        try storage.commit()
+        //try storage.commit()
     }
     
     public func commit() throws {

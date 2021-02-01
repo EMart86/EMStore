@@ -8,12 +8,12 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EMStore'
-  s.version          = '1.5.0'
+  s.version          = '1.6.0'
   s.swift_version    = '5.0'
   s.summary          = 'A simple SQLite wrapper library for faster setup of core data'
 
   s.description      = <<-DESC
-With this library, you don't need to write all this ManagedObjectContext and Persistance Store Coordinator, because it does that for you. All you need to do is to focus on your models and stay save from Corona
+With this library, you don't need to write all this ManagedObjectContext and Persistance Store Coordinator, because it does that for you. All you need to do is to focus on your models.
                        DESC
 
   s.homepage         = 'https://github.com/EMart86/EMStore'
@@ -22,7 +22,7 @@ With this library, you don't need to write all this ManagedObjectContext and Per
   s.author           = { 'eberl_ma@gmx.at' => 'Martin Eberl' }
   s.source           = { :git => 'https://github.com/EMart86/EMStore.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.tvos.deployment_target = '10.0'
 #s.osx.deployment_target = '10.12'
 

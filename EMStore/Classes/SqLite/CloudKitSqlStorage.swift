@@ -17,10 +17,10 @@ public var cloudSqlStorageFileUrl: URL?  {
     return URL(fileURLWithPath: path).appendingPathComponent("cloud-content.sqlite")
 }
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
 var sharedCloudPersistentContainer: NSPersistentCloudKitContainer?
 
-@available(iOS 13.0, *)
+@available(iOS 13.0, tvOS 13.0, *)
 final public class CloudKitSqliteStorage<T: NSManagedObject>: SqliteStorage<T> {
     private let containerId: String
     private let migrateWithCloud: Bool

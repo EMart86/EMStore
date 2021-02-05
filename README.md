@@ -1,6 +1,6 @@
 # EMStore
 
-[![CI Status](http://img.shields.io/travis/eberl_ma@gmx.at/EMStore.svg?style=flat)](https://travis-ci.org/eberl_ma@gmx.at/EMStore)
+[![CI Status](http://img.shields.io/travis/EMart86/EMStore.svg?style=flat)](https://travis-ci.org/EMart86/EMStore)
 [![Version](https://img.shields.io/cocoapods/v/EMStore.svg?style=flat)](http://cocoapods.org/pods/EMStore)
 [![License](https://img.shields.io/cocoapods/l/EMStore.svg?style=flat)](http://cocoapods.org/pods/EMStore)
 [![Platform](https://img.shields.io/cocoapods/p/EMStore.svg?style=flat)](http://cocoapods.org/pods/EMStore)
@@ -14,6 +14,10 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Xcode 9.4.1
 Swift 5.0
 
+## New In 1.6.1
+
+* Fix files not added to pod
+
 ## New In 1.6.0
 
 * Added Cloud Kit Support
@@ -23,6 +27,14 @@ Swift 5.0
 
 * Update Swift 5
 * Fix relationship between models did not work
+
+## New In 1.4.0
+
+Added
+``` store.commit()
+  store.rollback()
+```  
+
 
 ## New In 1.3.2
 

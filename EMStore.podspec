@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EMStore'
-  s.version          = '1.6.1'
+  s.version          = '1.6.2'
   s.swift_version    = '5.0'
   s.summary          = 'A simple SQLite wrapper library for faster setup of core data'
 

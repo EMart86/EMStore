@@ -17,7 +17,6 @@ public var sqlStorageFileUrl: URL?  {
     return URL(fileURLWithPath: path).appendingPathComponent("content.sqlite")
 }
 
-@available(iOS 10.0, *)
 var sharedPersistentContainer: NSPersistentContainer?
 var sharedManagedContext: NSManagedObjectContext?
 
@@ -123,7 +122,6 @@ public class SqliteStorage<T: NSManagedObject>: Storage {
         return model
     }
     
-    @available(iOS 10.0, *)
     private lazy var persistentContainer: NSPersistentContainer = {
         if let sharedPersistentContainer = sharedPersistentContainer {
             return sharedPersistentContainer

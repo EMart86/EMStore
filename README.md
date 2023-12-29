@@ -11,8 +11,13 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-Xcode 9.4.1
+Xcode 15.0.1
 Swift 5.0
+iOS & tvOS Minimum Deployment Target 12.0
+
+## New In 1.6.3
+
+* Increased Deployment Target from iOS and tvOS to 12.0
 
 ## New In 1.6.1
 

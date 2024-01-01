@@ -1,0 +1,16 @@
+PODS:
+  - EMStore (1.6.3)
+
+DEPENDENCIES:
+  - EMStore (from `../`)
+
+EXTERNAL SOURCES:
+  EMStore:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  EMStore: d8f951648b04b71d615e337d15e68563936e0cf4
+
+PODFILE CHECKSUM: 0402d9fd5757b6e8640836ead1d22a4c9bdf4e77
+
+COCOAPODS: 1.12.1

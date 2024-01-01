@@ -1,0 +1,6 @@
+framework module EMStore {
+  umbrella header "EMStore-tvOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
